@@ -1,0 +1,11 @@
+name = "cinderpress"
+pages_build_output_dir = "out_pages"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+NEXT_PUBLIC_APP_URL = "https://cinderpress.pages.dev"
+NEXT_PUBLIC_PUBLICATION_NAME = "CinderPress"
+NEXT_PUBLIC_INSFORGE_URL = "https://q7hwjwtx.ap-southeast.insforge.app"
+NEXT_PUBLIC_INSFORGE_ANON_KEY = "anon_4c318c8b629d149fca35396623101b6db2d93f213ba6b3e591878f9c66e52e70"
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME = "cinderpress-demo"

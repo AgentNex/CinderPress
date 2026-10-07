@@ -1,0 +1,2905 @@
+# MASTER BUILD PROMPT — CLOUDFLARE / CLOUDINARY / INSFORGE MODERN PUBLISHING CMS
+
+## 0. EXECUTION MODE
+
+You are the **sole implementation agent** for this project.
+
+Build the application directly inside the current repository using **Google Antigravity CLI** as the only coding agent/orchestrator.
+
+Do not hand the work off to another coding agent.
+Do not create a disposable prototype and leave production architecture for later.
+Do not replace the requested stack with Supabase, Firebase, Convex, Clerk, Auth0, Sanity, Contentful, WordPress, or another backend unless an explicit blocking technical reason is discovered and documented.
+
+Use the connected MCP servers, installed Agent Skills, repository tooling, browser verification tooling, and official documentation as your primary sources of truth.
+
+### Mandatory agent behavior
+
+1. Inspect the existing repository before making architectural decisions.
+2. Inspect the installed skills under the agent's available skills locations and actively use the most relevant design, Next.js, React, Cloudflare, Cloudinary, authentication, accessibility, performance, and verification skills.
+3. Prefer official first-party documentation and connected MCP tools over memory or guessed APIs.
+4. Never invent SDK methods, environment variables, API endpoints, MCP tool names, auth claims, or Cloudflare bindings.
+5. When a credential is missing, scaffold the integration correctly and use safe placeholders in `.env.example`; never silently create an insecure production bypass.
+6. Never use random client-generated user IDs as an authentication mechanism.
+7. Never use `localStorage` as the source of truth for authentication, identity, ownership, permissions, or production data.
+8. Development-only mocks must be explicitly isolated and impossible to activate accidentally in production.
+9. Use the MCP servers to inspect and configure services wherever the connected tools support it.
+10. Keep a short implementation log in the repository so future agent runs can understand what has been built and what remains.
+11. Do not stop after the first successful page render. Verify the full system: public site, auth, admin studio, CRUD, media upload, publishing, SEO, security, responsive behavior, and production build.
+12. Resolve routine implementation decisions autonomously. Do not repeatedly interrupt the user for minor choices.
+13. If a connected MCP tool can safely perform a required operation, prefer it over manual guessing.
+14. Before destructive infrastructure actions, check the current project/resource first and preserve existing user data.
+
+---
+
+# 1. PRODUCT VISION
+
+Build a polished, production-oriented **modern publishing CMS** that feels like a serious editorial product rather than a generic SaaS dashboard.
+
+Working product name:
+
+**CINDERPRESS**
+
+The final brand name can remain configurable, but the product experience should communicate:
+
+- modern publishing
+- editorial authority
+- precise typography
+- premium media handling
+- fast reading
+- calm administration
+- geometric industrial design
+- excellent mobile UX
+- strong content hierarchy
+- professional developer-grade craftsmanship
+
+Think:
+
+**Medium + Ghost + a modern editorial CMS + Cloudinary-powered media library**
+
+but do NOT copy their layouts, branding, or distinctive UI.
+
+The application has two major surfaces:
+
+A. **PUBLIC PUBLISHING EXPERIENCE**
+- home page
+- publication landing page
+- article pages
+- category pages
+- tag pages
+- author pages
+- search
+- archives
+- RSS
+- sitemap
+- robots
+- share links
+- responsive media
+- related stories
+
+B. **PRIVATE CMS STUDIO**
+- authenticated dashboard
+- content management
+- article editor
+- draft/publish workflow
+- scheduling-ready architecture
+- media library
+- authors/profile
+- categories/tags
+- revisions
+- comments/moderation
+- publication settings
+- SEO settings
+- analytics-ready event architecture
+- account/settings
+- safe sign-out
+
+This is not merely a blog page with an admin form.
+
+It is a complete publishing system.
+
+---
+
+# 2. CORE STACK — NON-NEGOTIABLE
+
+## Frontend / application
+
+Use:
+
+- Next.js App Router
+- TypeScript
+- React
+- Tailwind CSS
+- shadcn/ui where useful
+- accessible primitives
+- server components by default
+- client components only where interactivity requires them
+
+Use the current stable versions that are compatible with the project and current Cloudflare deployment tooling.
+
+Do not blindly pin obsolete versions.
+
+## Hosting / edge application layer
+
+Use:
+
+**Cloudflare**
+
+Primary responsibilities:
+
+- application hosting/runtime where compatible
+- Workers/server runtime
+- routing
+- edge API endpoints
+- D1 database
+- caching
+- headers
+- security controls
+- rate limiting strategy
+- observability
+- deployment
+
+Use the current official Cloudflare integration for Next.js/Workers rather than hand-rolling an unsupported deployment path.
+
+Use official Cloudflare MCP/documentation to validate the current recommended deployment architecture before implementation.
+
+## Database
+
+Use:
+
+**Cloudflare D1**
+
+D1 stores application/content data.
+
+Do not store large binary media in D1.
+
+D1 should contain metadata and structured application state such as:
+
+- authors
+- publications
+- posts
+- post revisions
+- categories
+- tags
+- post/category relationships
+- post/tag relationships
+- media references
+- comments
+- moderation states
+- site settings
+- SEO data
+- audit records
+- search index data if appropriate
+
+## Media
+
+Use:
+
+**Cloudinary**
+
+Cloudinary is the media infrastructure, not the relational database.
+
+Use Cloudinary for:
+
+- article cover images
+- inline article images
+- author avatars
+- image galleries
+- uploaded video
+- thumbnails
+- image transformations
+- responsive delivery
+- format optimization
+- quality optimization
+- cropping
+- focal-point-aware transformations
+- media metadata
+- asset management
+- media CDN delivery
+
+Prefer Cloudinary's official SDK/integration patterns.
+
+Use the Cloudinary Agent Skills and MCP tools whenever available.
+
+Never expose Cloudinary API secrets in browser code.
+
+## Authentication
+
+Use:
+
+**InsForge Auth**
+
+Use InsForge primarily as the identity/authentication layer for this application.
+
+Authentication should support the capabilities available in the connected InsForge project/current plan, with a clean abstraction so the application is not coupled to UI-specific assumptions.
+
+Required auth UX:
+
+- sign up
+- sign in
+- sign out
+- session persistence
+- authenticated loading state
+- unauthorized state
+- password recovery/reset where supported
+- email verification where supported
+- OAuth/social sign-in where configured/supported
+- profile settings
+- clear errors
+- no anonymous production admin access
+
+Do NOT use:
+
+- random UUIDs generated in the browser as identity
+- localStorage identity
+- hard-coded admin IDs
+- hidden "default_admin"
+- devFallbackToken
+- bypass tokens
+- fake auth headers
+- automatically authenticated dashboards
+- production mock sessions
+
+The server must derive the authenticated user from the real InsForge-authenticated request/session according to the official current InsForge integration pattern.
+
+If token validation is needed at the Cloudflare layer, use the official current InsForge mechanism and libraries/docs. Do not decode or trust arbitrary browser-supplied identity claims without proper verification.
+
+## Optional Cloudflare storage
+
+**Do NOT add R2 merely because it exists.**
+
+Cloudinary already owns application media.
+
+Only use R2 if a clearly justified non-media object-storage need emerges that Cloudinary is not appropriate for.
+
+Avoid duplicate storage systems.
+
+## External services
+
+Do not add another service unless it is necessary for a clearly scoped feature.
+
+Payments are out of scope for v1.
+
+A full email marketing platform is out of scope for v1.
+
+A third-party analytics provider is optional; build an internal event abstraction so one can be connected later.
+
+---
+
+# 3. MCP + AGENT SKILL STRATEGY
+
+The project must be built as an agent-native workflow.
+
+## Cloudinary
+
+Use Cloudinary's official:
+
+- Agent Skills
+- MCP tooling
+- SDK documentation
+- asset management tooling
+- transformation guidance
+
+Use these capabilities to:
+
+- inspect account/project state
+- validate integration
+- create/test media workflows
+- reason about transformation syntax
+- verify upload patterns
+- manage or inspect assets when appropriate
+- reduce guessed Cloudinary implementation code
+
+If Cloudinary Skills are available, actively invoke the relevant ones, especially documentation, React/Next.js integration, image transformations, upload, media delivery, and asset-management skills.
+
+## Cloudflare
+
+Use Cloudflare's current official MCP/documentation for:
+
+- Workers
+- D1
+- deployment
+- bindings
+- configuration
+- logs/observability
+- caching
+- security
+- production verification
+
+Prefer the official Cloudflare docs MCP/managed MCP when connected.
+
+Do not guess Cloudflare binding names or deployment flags.
+
+Inspect current project configuration before changing it.
+
+## InsForge
+
+Use InsForge's current:
+
+- MCP
+- Skills
+- CLI
+- SDK
+- authentication documentation
+
+for:
+
+- auth setup
+- user/session inspection
+- auth provider configuration
+- safe project configuration
+- backend integration
+
+The agent should connect to the appropriate project through the authenticated MCP flow where available.
+
+## Installed design skills
+
+Before designing the UI, inspect all available design/UI skills in the agent environment.
+
+Actively use the relevant installed skills rather than ignoring them.
+
+At minimum, use the most relevant available guidance for:
+
+- shadcn/ui
+- Geist/typography
+- Next.js App Router
+- React best practices
+- accessibility
+- responsive design
+- animation/motion
+- browser verification
+
+If a specialized editorial/design-system skill exists in the installed environment, use it.
+
+Do not use a design skill merely to decorate the UI. Use it to improve hierarchy, interaction, spacing, semantics, typography, responsiveness, and visual consistency.
+
+---
+
+# 4. VISUAL DIRECTION — THIS IS EXTREMELY IMPORTANT
+
+The visual design is a first-class requirement.
+
+## Absolute rejection of the generic AI/SaaS aesthetic
+
+DO NOT produce:
+
+- neon purple
+- electric blue/purple gradients
+- cyan/pink cyberpunk glow
+- generic AI "glassmorphism" dashboards
+- floating gradient blobs
+- excessive blur
+- glowing cards
+- excessive rounded pills
+- giant gradient text
+- fake futuristic holograms
+- generic dark-mode SaaS template
+- excessive frosted-glass surfaces
+- "security lock" visual clichés
+- stock 3D padlocks
+- generic shield illustrations
+- cheesy futuristic circuitry
+- excessive drop shadows
+- noisy decorative backgrounds
+- rainbow gradients
+- oversized meaningless hero typography
+- UI that looks like an AI startup template from a component generator
+
+Do not make the design look "AI-generated."
+
+It should look intentionally art-directed.
+
+## Design goal
+
+Build a visual identity inspired by the practical, industrial, precise qualities of modern Cloudflare-style product design:
+
+- warm white
+- near-black
+- orange as a focused accent
+- graphite
+- soft beige
+- subtle cool gray
+- precise borders
+- geometric motifs
+- clean grid
+- strong typography
+- editorial whitespace
+- controlled depth
+
+This is **inspired by the visual language**, not a copy of Cloudflare branding.
+
+Do not reproduce Cloudflare's trademark logo or make the product falsely appear affiliated with Cloudflare.
+
+## Palette
+
+Use a restrained system such as:
+
+Primary orange:
+`#F48120`
+
+Deep orange:
+`#D86612`
+
+Ink:
+`#171717`
+
+Charcoal:
+`#242424`
+
+Warm paper:
+`#FAF8F3`
+
+Soft paper:
+`#F3F0E8`
+
+Border:
+`#D9D4CA`
+
+Muted text:
+`#6B6B67`
+
+White:
+`#FFFFFF`
+
+Success:
+a restrained green, used sparingly
+
+Error:
+a restrained red, used sparingly
+
+Do NOT use gradients for the main brand palette.
+
+Orange should be an accent, not a flood of orange.
+
+The UI should still look excellent when orange accents are removed.
+
+## Typography
+
+Primary UI/content font:
+
+- Geist Sans or the best available equivalent matching the intended precision.
+
+Monospace:
+
+- Geist Mono or a clean system monospace.
+
+Editorial headlines may use a strong display treatment, but avoid a decorative fashion font.
+
+Priorities:
+
+1. excellent readability
+2. precise letter spacing
+3. strong hierarchy
+4. comfortable line lengths
+5. consistent rhythm
+
+Do not randomly combine five fonts.
+
+## Logo / mark direction
+
+Create a distinctive **highly geometric, isometric brand mark** for CinderPress.
+
+The mark should feel:
+
+- engineered
+- editorial
+- architectural
+- modular
+- isometric
+- precise
+- memorable at favicon size
+
+Potential visual concept:
+
+An abstract folded page / editorial block / layered publication tile represented as a clean isometric form.
+
+Avoid:
+- literal padlocks
+- shields
+- clouds
+- generic cubes
+- generic "AI spark" symbols
+
+The mark may use subtle 2.5D/isometric construction with clear geometry.
+
+Do not create a visually overcomplicated logo.
+
+The logo must work in:
+- 16px favicon context
+- 32px icon
+- 128px application header
+- black/white version
+- orange/black version
+- monochrome version
+
+## Isometric imagery
+
+Use highly detailed geometric/isometric illustrations selectively for:
+
+- empty states
+- onboarding
+- media library empty state
+- publication setup
+- 404 page
+- dashboard welcome state
+- feature illustrations
+
+These should feel like editorial/architectural diagrams, not cartoon SaaS mascots.
+
+Use SVG/CSS/inline geometry where possible.
+
+Do not pull random stock imagery.
+
+When a decorative illustration can be expressed as geometry, prefer code-generated vector geometry.
+
+## Depth
+
+Use:
+
+- crisp 1px borders
+- subtle ambient shadow
+- small elevation differences
+- occasional inset surfaces
+- controlled rounded corners
+
+Corner radii should feel architectural rather than toy-like.
+
+Preferred general range:
+
+- small: 6–8px
+- medium: 10–14px
+- large: 16–20px
+
+Avoid turning every element into a pill.
+
+## Motion
+
+Motion should feel:
+
+- subtle
+- physically plausible
+- fast
+- intentional
+
+Use animation primarily for:
+
+- page transitions
+- navigation
+- editor affordances
+- hover feedback
+- menu opening
+- upload progress
+- toast entrance
+- publish state changes
+- image reveal
+- subtle geometric logo motion
+
+Avoid constant floating animations.
+
+Avoid animation on every card.
+
+Respect `prefers-reduced-motion`.
+
+Use the installed animation/motion skill guidance when available.
+
+---
+
+# 5. PRODUCT INFORMATION ARCHITECTURE
+
+## Public routes
+
+Use clean editorial URLs.
+
+Recommended:
+
+`/`
+`/stories`
+`/stories/[slug]`
+`/category/[slug]`
+`/tag/[slug]`
+`/author/[slug]`
+`/search`
+`/about`
+`/archive/[year]`
+`/rss.xml`
+`/sitemap.xml`
+`/robots.txt`
+
+Optional:
+
+`/page/[slug]`
+
+The publication's public base should be easy to customize.
+
+## Auth routes
+
+`/auth/sign-in`
+`/auth/sign-up`
+`/auth/forgot-password`
+`/auth/reset-password`
+`/auth/verify-email`
+`/auth/callback`
+
+Only create routes that are actually required by the current InsForge flow.
+
+## Admin routes
+
+Use a consistent namespace such as:
+
+`/studio`
+`/studio/posts`
+`/studio/posts/new`
+`/studio/posts/[id]`
+`/studio/media`
+`/studio/categories`
+`/studio/tags`
+`/studio/authors`
+`/studio/comments`
+`/studio/revisions`
+`/studio/settings`
+`/studio/settings/profile`
+`/studio/settings/publication`
+`/studio/settings/seo`
+
+The exact route structure can be improved after repository inspection, but the conceptual separation must remain.
+
+---
+
+# 6. CORE USER EXPERIENCE
+
+## Public reader experience
+
+A visitor should be able to:
+
+1. arrive at the home page
+2. understand what the publication is about immediately
+3. scan featured and recent stories
+4. filter by category/tag
+5. open an article
+6. read comfortably on mobile
+7. see correctly optimized Cloudinary media
+8. discover related stories
+9. open an author page
+10. search
+11. copy/share the article URL
+12. navigate back naturally
+
+## CMS author experience
+
+An authenticated author should be able to:
+
+1. open Studio
+2. create a post
+3. enter title/dek/excerpt
+4. create rich content
+5. upload images through Cloudinary
+6. insert images into content
+7. assign categories
+8. assign tags
+9. select cover image
+10. edit SEO metadata
+11. preview
+12. save as draft
+13. publish
+14. see publication state
+15. revise content
+16. inspect revision history
+17. manage media
+18. manage profile
+
+## Admin experience
+
+Where the current project supports administrative ownership/roles, allow authorized users to:
+
+- moderate comments
+- manage categories
+- manage tags
+- manage publication settings
+- manage authors
+- manage SEO defaults
+- review audit events
+
+Do not invent a giant RBAC framework for v1.
+
+Start with a small, explicit role model such as:
+
+- owner
+- editor
+- author
+- moderator
+
+Implement only the permissions actually used by the product.
+
+---
+
+# 7. CONTENT MODEL
+
+Use normalized relational data in D1.
+
+## Publication
+
+Conceptual fields:
+
+- id
+- name
+- slug
+- description
+- logo_media_id
+- favicon_media_id
+- default_cover_media_id
+- locale
+- timezone
+- theme_config
+- social_links
+- seo_defaults
+- created_at
+- updated_at
+
+## Author profile
+
+- id
+- auth_user_id
+- display_name
+- slug
+- bio
+- avatar_media_id
+- website
+- social_links
+- created_at
+- updated_at
+
+`auth_user_id` must correspond to the external authenticated identity.
+
+Do not duplicate passwords or authentication secrets.
+
+## Post
+
+- id
+- author_id
+- title
+- slug
+- dek/subtitle
+- excerpt
+- content_json
+- content_html
+- cover_media_id
+- status
+- visibility
+- published_at
+- scheduled_at (nullable, architecture-ready)
+- reading_time_minutes
+- canonical_url
+- seo_title
+- seo_description
+- og_title
+- og_description
+- created_at
+- updated_at
+- deleted_at (nullable)
+
+Suggested status:
+
+- draft
+- published
+- archived
+
+Visibility:
+
+- public
+- private
+
+Keep state transitions explicit and validated.
+
+## Post revision
+
+- id
+- post_id
+- author_id
+- content_json
+- title
+- dek
+- excerpt
+- seo fields
+- cover_media_id
+- created_at
+
+Do not store unlimited gigantic duplicate payloads without reason.
+
+Use a sane revision strategy.
+
+## Category
+
+- id
+- name
+- slug
+- description
+- created_at
+- updated_at
+
+## Tag
+
+- id
+- name
+- slug
+- created_at
+
+## Post-category relation
+
+- post_id
+- category_id
+
+## Post-tag relation
+
+- post_id
+- tag_id
+
+## Media
+
+Store Cloudinary references, not binary blobs.
+
+Conceptual fields:
+
+- id
+- owner_auth_user_id
+- cloudinary_public_id
+- cloudinary_asset_id
+- resource_type
+- media_type
+- secure_url
+- width
+- height
+- duration
+- format
+- bytes
+- alt_text
+- caption
+- credit
+- folder
+- created_at
+- updated_at
+
+Important:
+
+The database is the application's source of truth for how the media asset is used.
+
+Cloudinary remains the source of truth for the actual media asset.
+
+## Comment
+
+- id
+- post_id
+- author_name
+- author_email (only when genuinely required; protect it)
+- body
+- status
+- created_at
+- updated_at
+
+Suggested status:
+
+- pending
+- approved
+- rejected
+- spam
+
+Do not expose private moderation data to public routes.
+
+## Audit event
+
+- id
+- actor_auth_user_id
+- action
+- entity_type
+- entity_id
+- metadata_json
+- created_at
+
+Avoid storing secrets or sensitive tokens in audit metadata.
+
+---
+
+# 8. HIGH-LEVEL ARCHITECTURE DIAGRAM
+
+Use this as the target system shape.
+
+```mermaid
+flowchart TB
+    U[Reader / Author / Editor] --> CFEDGE[Cloudflare Edge]
+
+    CFEDGE --> PUBLIC[Next.js Public Experience]
+    CFEDGE --> STUDIO[Next.js CMS Studio]
+    CFEDGE --> API[Server / Worker API Layer]
+
+    API --> AUTH[InsForge Auth]
+    API --> DB[(Cloudflare D1)]
+    API --> CLD[Cloudinary]
+
+    PUBLIC --> CLD
+    STUDIO --> CLD
+
+    DB --> SEARCH[SQLite Search / FTS where appropriate]
+
+    CFEDGE --> CACHE[Cloudflare Cache / Edge Cache]
+    API --> LOGS[Cloudflare Observability]
+
+    subgraph Identity
+        AUTH
+    end
+
+    subgraph Application Data
+        DB
+        SEARCH
+    end
+
+    subgraph Media Infrastructure
+        CLD
+    end
+
+    subgraph Edge Infrastructure
+        CFEDGE
+        CACHE
+        LOGS
+    end
+```
+
+---
+
+# 9. RESPONSIBILITY BOUNDARY DIAGRAM
+
+Keep the boundaries clean.
+
+```text
+┌───────────────────────────────────────────────────────────┐
+│                     CINDERPRESS APP                        │
+├───────────────────────────────────────────────────────────┤
+│                                                           │
+│  Next.js / React                                          │
+│  ├── Public site                                          │
+│  ├── Studio                                               │
+│  ├── Editor                                               │
+│  └── Reader experience                                    │
+│                                                           │
+├───────────────────────────────────────────────────────────┤
+│                  APPLICATION LOGIC                         │
+│                                                           │
+│  Cloudflare Workers / server runtime                      │
+│  ├── authorization checks                                 │
+│  ├── CRUD                                                  │
+│  ├── publishing                                            │
+│  ├── search                                                │
+│  ├── media signing/orchestration                          │
+│  ├── caching                                               │
+│  └── security                                               │
+│                                                           │
+├──────────────────────┬────────────────────────────────────┤
+│                      │                                    │
+│  INSFORGE AUTH       │         CLOUDFLARE D1              │
+│  ├── identity        │         ├── posts                  │
+│  ├── sessions        │         ├── authors                │
+│  ├── sign-in         │         ├── categories             │
+│  ├── sign-up         │         ├── tags                   │
+│  └── recovery        │         ├── comments               │
+│                      │         └── metadata                │
+│                      │                                    │
+├──────────────────────┴────────────────────────────────────┤
+│                       CLOUDINARY                           │
+│  ├── images                                               │
+│  ├── video                                                │
+│  ├── transformations                                      │
+│  ├── responsive delivery                                  │
+│  └── media CDN                                            │
+└───────────────────────────────────────────────────────────┘
+```
+
+---
+
+# 10. AUTHENTICATION FLOW
+
+Implement the actual current InsForge-auth flow, verified against the connected docs.
+
+Conceptually:
+
+```mermaid
+sequenceDiagram
+    participant Browser
+    participant App as Next.js / Cloudflare
+    participant Auth as InsForge Auth
+    participant DB as D1
+
+    Browser->>App: Open /studio
+    App->>Auth: Resolve current authenticated session
+    Auth-->>App: Verified identity / no session
+
+    alt authenticated
+        App->>DB: Load authorized content
+        DB-->>App: Content
+        App-->>Browser: Studio
+    else unauthenticated
+        App-->>Browser: Redirect / show auth
+    end
+
+    Browser->>App: Sign out
+    App->>Auth: Invalidate/end session
+    Auth-->>App: Success
+    App-->>Browser: Signed-out state
+```
+
+Never implement a fake version of this flow.
+
+The exact API/SDK behavior must come from current InsForge documentation/skills.
+
+---
+
+# 11. MEDIA UPLOAD FLOW
+
+Cloudinary is responsible for media.
+
+Target flow:
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant UI as Studio
+    participant App as Cloudflare / Worker
+    participant C as Cloudinary
+    participant DB as D1
+
+    User->>UI: Select image/video
+    UI->>App: Request upload authorization/signature
+    App->>App: Verify authenticated user
+    App-->>UI: Short-lived upload parameters
+
+    UI->>C: Upload media
+    C-->>UI: Asset result
+
+    UI->>App: Save media metadata/reference
+    App->>DB: Insert media row
+    DB-->>App: Media ID
+    App-->>UI: Media record
+```
+
+Requirements:
+
+- never put Cloudinary API secret in browser code
+- validate file type
+- validate expected limits
+- reject clearly dangerous/unacceptable content where practical
+- generate deterministic folder conventions
+- use user/publication scoping
+- store Cloudinary public ID and asset metadata in D1
+- support alt text
+- support captions
+- support credit/source
+- provide upload progress
+- provide clear failure states
+- do not orphan database records when upload fails
+- do not create database references before a successful Cloudinary asset creation unless transactional compensation is implemented
+
+Recommended organization concept:
+
+`cinderpress/{publication-id}/{media-type}/...`
+
+The exact folder implementation must follow current Cloudinary guidance, including current folder mode behavior.
+
+---
+
+# 12. PUBLISHING FLOW
+
+```mermaid
+sequenceDiagram
+    participant Author
+    participant Studio
+    participant App
+    participant DB
+    participant Public
+
+    Author->>Studio: Edit draft
+    Studio->>App: Save
+    App->>DB: Persist draft/revision
+
+    Author->>Studio: Publish
+    Studio->>App: Publish request
+    App->>App: Verify auth + role + validation
+    App->>DB: Set status=published
+    App->>DB: Set published_at
+    App-->>Studio: Published
+
+    Public->>App: Request article
+    App->>DB: Read published article
+    DB-->>App: Article
+    App-->>Public: Render article
+```
+
+On publish:
+
+- validate title
+- validate slug
+- validate required content
+- validate author
+- validate cover media where required
+- calculate/update reading time
+- update canonical SEO metadata
+- set publication timestamp if first published
+- create revision if appropriate
+- invalidate affected caches/tags
+- update search index
+- return a clear result
+
+Do not allow drafts to leak onto public pages.
+
+---
+
+# 13. POST EDITOR
+
+Use a mature structured rich-text editor such as Tiptap or another well-supported editor only after checking the project's current dependencies and official documentation.
+
+Editor requirements:
+
+- title
+- dek/subtitle
+- excerpt
+- rich text
+- headings
+- paragraph
+- bold
+- italic
+- links
+- ordered list
+- unordered list
+- quote
+- code block
+- inline code
+- divider
+- image
+- video/media embed
+- caption
+- callout
+- undo/redo
+- keyboard shortcuts
+- autosave
+- manual save
+- preview
+- publish
+- revision history
+
+Content must be stored as structured JSON.
+
+A safely rendered HTML representation may also be persisted for read performance if it can be deterministically regenerated.
+
+Never render unsanitized arbitrary HTML.
+
+---
+
+# 14. EDITORIAL LAYOUT
+
+The editor should feel like a serious writing environment, not a giant form.
+
+Suggested layout:
+
+```text
+┌──────────────────────────────────────────────────────────────────┐
+│ CINDERPRESS        Draft saved       Preview      Publish       │
+├───────────────┬──────────────────────────────────┬───────────────┤
+│               │                                  │               │
+│ CONTENT       │        EDITORIAL CANVAS          │ PUBLISHING    │
+│ NAVIGATION    │                                  │ SIDEBAR       │
+│               │  Title                           │               │
+│ Overview      │  Your headline...                │ Status        │
+│ Content       │                                  │ Visibility    │
+│ Media         │  Dek                             │ Author        │
+│ SEO           │                                  │ Category      │
+│ Revisions     │  Body                            │ Tags          │
+│               │                                  │ Cover         │
+│               │                                  │ SEO           │
+└───────────────┴──────────────────────────────────┴───────────────┘
+```
+
+On mobile:
+
+- collapse navigation
+- make editor full-width
+- move publishing options into a drawer/sheet
+- keep save/publish actions reachable
+- avoid unusably tiny controls
+
+---
+
+# 15. PUBLIC ARTICLE DESIGN
+
+The article reading experience is the heart of the product.
+
+Target:
+
+```text
+                 PUBLICATION
+                     CATEGORIES
+
+       The headline should feel editorial,
+       confident, and extremely readable.
+
+       A meaningful dek gives context.
+
+       AUTHOR · DATE · READING TIME
+
+       ┌─────────────────────────────────────┐
+       │                                     │
+       │            COVER MEDIA               │
+       │                                     │
+       └─────────────────────────────────────┘
+
+       Article content begins here.
+
+       Comfortable line length.
+       Strong paragraph spacing.
+       Excellent typography.
+
+       Images are beautifully optimized.
+
+       ─────────────────────────────────────
+
+       Related stories
+```
+
+Recommended reading width:
+
+approximately 680–760px for primary text, adjusted based on font metrics.
+
+Do not make paragraphs span the entire desktop viewport.
+
+---
+
+# 16. HOME PAGE STRUCTURE
+
+Build an editorial homepage with a clear visual hierarchy.
+
+Possible structure:
+
+```text
+┌──────────────────────────────────────────────────────────────┐
+│ LOGO     Stories   Categories   Search          Sign In       │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│ FEATURED                                                      │
+│                                                              │
+│  LARGE FEATURE STORY                  SIDE STORIES            │
+│                                                              │
+│  [cover image]                       [story]                 │
+│  Category                            [story]                 │
+│  Headline                            [story]                 │
+│  Dek                                                          │
+│                                                              │
+├──────────────────────────────────────────────────────────────┤
+│ LATEST                                                        │
+│                                                              │
+│ Story card                                                   │
+│ Story card                                                   │
+│ Story card                                                   │
+│                                                              │
+├──────────────────────────────────────────────────────────────┤
+│ TOPICS / CATEGORIES                                           │
+├──────────────────────────────────────────────────────────────┤
+│ AUTHORS / CONTRIBUTORS                                        │
+└──────────────────────────────────────────────────────────────┘
+```
+
+Avoid a grid full of identical cards.
+
+Editorial layout should deliberately vary hierarchy.
+
+---
+
+# 17. SEARCH
+
+Build a useful search experience.
+
+For v1:
+
+- title search
+- excerpt search
+- content search
+- author search where useful
+- category/tag filtering
+
+Prefer D1/SQLite FTS5 or another Cloudflare-compatible local search strategy where supported.
+
+Search UX:
+
+- instant search field
+- debounce input
+- loading state
+- no-result state
+- highlighted metadata
+- filters
+- keyboard-friendly navigation
+
+Do not build an unnecessarily expensive search service.
+
+---
+
+# 18. SEO / DISCOVERABILITY
+
+Public content must be SEO-aware.
+
+Implement:
+
+- metadata per page
+- canonical URLs
+- article metadata
+- author metadata
+- Open Graph metadata
+- Twitter/X card metadata
+- JSON-LD for Article where appropriate
+- breadcrumb structured data where useful
+- sitemap
+- robots
+- RSS
+- clean slugs
+- meaningful titles/descriptions
+- image alt text
+- semantic headings
+
+Generate metadata from the database.
+
+Do not hard-code the same title/description on every page.
+
+---
+
+# 19. CLOUDINARY DELIVERY STRATEGY
+
+For images:
+
+- use responsive widths
+- use automatic format selection
+- use automatic quality optimization
+- use appropriate crop modes
+- use focal-aware cropping when beneficial
+- prevent layout shift by preserving width/height/aspect ratio
+- provide meaningful alt text
+- use appropriate loading behavior
+
+Do not ship original multi-megabyte images when a smaller derivative is appropriate.
+
+Do not manually maintain ten URLs for every breakpoint if the official Cloudinary integration can generate them correctly.
+
+For video:
+
+- lazy load where appropriate
+- poster image
+- correct aspect ratio
+- responsive rendering
+- avoid auto-playing sound
+- support reduced-data considerations
+- use Cloudinary's supported delivery/transcoding patterns
+
+---
+
+# 20. DATA OWNERSHIP MODEL
+
+Use a strict ownership relationship.
+
+Conceptually:
+
+```text
+InsForge identity
+      │
+      ▼
+Author profile
+      │
+      ▼
+Publication membership / role
+      │
+      ├── Posts
+      ├── Media references
+      ├── Revisions
+      ├── Moderation actions
+      └── Settings
+```
+
+Every protected operation should answer:
+
+1. Who is the authenticated user?
+2. Is the user actually authenticated?
+3. Which publication/workspace does the resource belong to?
+4. What role/permission does the user have?
+5. Is the requested resource owned by or accessible to that user?
+
+Never trust a user-provided `ownerId` simply because it appears in request JSON.
+
+---
+
+# 21. SECURITY REQUIREMENTS
+
+Production security is non-negotiable.
+
+## Secrets
+
+Never commit:
+
+- InsForge secrets
+- Cloudinary API secrets
+- Cloudflare API tokens
+- private keys
+- session secrets
+- webhook secrets
+
+Use environment variables/secrets.
+
+Create `.env.example` with names only and safe placeholder values.
+
+## Authentication
+
+No bypass.
+
+No fallback identity.
+
+No hard-coded admin account.
+
+No password storage in application database.
+
+No client-side-only authorization.
+
+## Authorization
+
+Check permissions server-side.
+
+Do not hide UI buttons and call that authorization.
+
+## Content security
+
+Sanitize rich text output.
+
+Validate URLs.
+
+Avoid unsafe iframe embedding.
+
+Use allowlists where appropriate.
+
+## Upload security
+
+Validate:
+
+- MIME
+- file extension
+- expected resource type
+- size
+- upload intent
+- ownership
+
+Do not let arbitrary users overwrite another user's Cloudinary asset reference.
+
+## API
+
+Validate request bodies using a schema library such as Zod.
+
+Return structured errors.
+
+Do not leak stack traces in production responses.
+
+## Rate limiting
+
+Use a practical Cloudflare-compatible strategy on public mutation endpoints such as:
+
+- sign-in related actions if proxied
+- comment submission
+- media signature generation
+- search abuse
+- publishing actions
+
+Do not add extreme complexity for low-traffic v1.
+
+---
+
+# 22. RESPONSIVENESS
+
+Design mobile-first.
+
+Target:
+
+- 360px
+- 390px
+- 430px
+- tablet
+- 1280px
+- 1440px
+- 1920px
+
+The site must work on low-memory Android devices.
+
+Avoid:
+
+- giant JS bundles
+- unnecessary client-side state
+- massive animation libraries when CSS will do
+- expensive continuous animation
+- oversized background video
+- unoptimized images
+- giant editor payloads in React state
+
+Make the reader experience especially fast on mobile.
+
+---
+
+# 23. ACCESSIBILITY
+
+Meet strong practical accessibility standards.
+
+Required:
+
+- semantic HTML
+- real buttons
+- real links
+- keyboard navigation
+- visible focus states
+- accessible labels
+- accessible dialogs/sheets
+- accessible forms
+- proper heading order
+- adequate contrast
+- reduced motion support
+- error announcements where appropriate
+- no interaction that depends solely on hover
+
+Use accessible shadcn/Radix primitives where helpful.
+
+Do not customize away useful accessibility behavior.
+
+---
+
+# 24. PERFORMANCE
+
+Performance matters as much as aesthetics.
+
+Use:
+
+- Server Components by default
+- route-level data fetching
+- streaming where beneficial
+- caching
+- cache invalidation on publish/update
+- lazy loading
+- responsive Cloudinary media
+- minimal client-side hydration
+- dynamic imports for heavy editor code
+- skeletons rather than spinners where appropriate
+- prefetch only where it helps
+
+Avoid:
+
+- making the entire app a client component
+- fetching everything in `useEffect`
+- duplicate API fetches
+- loading the editor on public pages
+- loading admin modules on public pages
+- loading huge icon sets unnecessarily
+
+---
+
+# 25. CACHE STRATEGY
+
+Public content can be aggressively cached.
+
+Private Studio pages must remain user-specific.
+
+Conceptual cache model:
+
+```text
+PUBLIC ARTICLE
+    │
+    ├── cacheable
+    ├── revalidated after publish
+    └── keyed by slug/content version
+
+STUDIO
+    │
+    ├── authenticated
+    ├── dynamic/private
+    └── never shared across users
+
+MEDIA
+    │
+    └── Cloudinary CDN
+```
+
+When a post changes:
+
+- invalidate/revalidate the article page
+- invalidate related listing cache
+- invalidate category/tag pages if affected
+- invalidate sitemap if needed
+- update RSS if needed
+
+Do not cache private authenticated responses publicly.
+
+---
+
+# 26. PROJECT STRUCTURE
+
+Aim for a maintainable structure similar to:
+
+```text
+.
+├── app/
+│   ├── (public)/
+│   │   ├── page.tsx
+│   │   ├── stories/
+│   │   │   ├── page.tsx
+│   │   │   └── [slug]/
+│   │   │       └── page.tsx
+│   │   ├── category/[slug]/page.tsx
+│   │   ├── tag/[slug]/page.tsx
+│   │   ├── author/[slug]/page.tsx
+│   │   ├── search/page.tsx
+│   │   ├── archive/[year]/page.tsx
+│   │   └── ...
+│   │
+│   ├── auth/
+│   │   ├── sign-in/
+│   │   ├── sign-up/
+│   │   ├── forgot-password/
+│   │   ├── reset-password/
+│   │   ├── verify-email/
+│   │   └── callback/
+│   │
+│   ├── studio/
+│   │   ├── page.tsx
+│   │   ├── posts/
+│   │   ├── media/
+│   │   ├── categories/
+│   │   ├── tags/
+│   │   ├── authors/
+│   │   ├── comments/
+│   │   ├── revisions/
+│   │   └── settings/
+│   │
+│   ├── api/
+│   │   ├── auth/
+│   │   ├── posts/
+│   │   ├── media/
+│   │   ├── comments/
+│   │   ├── search/
+│   │   └── ...
+│   │
+│   ├── rss.xml/
+│   ├── sitemap.ts
+│   └── robots.ts
+│
+├── components/
+│   ├── ui/
+│   ├── public/
+│   ├── studio/
+│   ├── editor/
+│   ├── media/
+│   ├── navigation/
+│   └── shared/
+│
+├── lib/
+│   ├── auth/
+│   ├── cloudinary/
+│   ├── cloudflare/
+│   ├── db/
+│   ├── posts/
+│   ├── media/
+│   ├── seo/
+│   ├── validation/
+│   ├── cache/
+│   └── permissions/
+│
+├── db/
+│   ├── migrations/
+│   ├── schema/
+│   └── seeds/
+│
+├── public/
+│   ├── brand/
+│   └── icons/
+│
+├── styles/
+│
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   └── e2e/
+│
+├── scripts/
+│
+├── cloudflare configuration
+├── package.json
+├── tsconfig.json
+└── README.md
+```
+
+Adjust to the existing repository instead of blindly replacing a working structure.
+
+---
+
+# 27. DATABASE DIAGRAM
+
+Use this conceptual ER model.
+
+```mermaid
+erDiagram
+    PUBLICATION ||--o{ AUTHOR : has
+    PUBLICATION ||--o{ POST : contains
+    AUTHOR ||--o{ POST : writes
+    POST ||--o{ POST_REVISION : has
+    POST ||--o{ COMMENT : receives
+    POST }o--o{ CATEGORY : classified_by
+    POST }o--o{ TAG : tagged_with
+    PUBLICATION ||--o{ MEDIA : owns
+    POST ||--o| MEDIA : cover
+    POST }o--o{ MEDIA : references
+
+    PUBLICATION {
+        string id
+        string name
+        string slug
+        string description
+        string theme_config
+        string seo_defaults
+        datetime created_at
+        datetime updated_at
+    }
+
+    AUTHOR {
+        string id
+        string publication_id
+        string auth_user_id
+        string display_name
+        string slug
+        string bio
+        string avatar_media_id
+        datetime created_at
+        datetime updated_at
+    }
+
+    POST {
+        string id
+        string publication_id
+        string author_id
+        string title
+        string slug
+        string dek
+        string excerpt
+        string content_json
+        string content_html
+        string cover_media_id
+        string status
+        string visibility
+        datetime published_at
+        datetime scheduled_at
+        integer reading_time_minutes
+        string canonical_url
+        string seo_title
+        string seo_description
+        datetime created_at
+        datetime updated_at
+    }
+
+    POST_REVISION {
+        string id
+        string post_id
+        string author_id
+        string snapshot_json
+        datetime created_at
+    }
+
+    CATEGORY {
+        string id
+        string publication_id
+        string name
+        string slug
+        string description
+    }
+
+    TAG {
+        string id
+        string publication_id
+        string name
+        string slug
+    }
+
+    MEDIA {
+        string id
+        string publication_id
+        string owner_auth_user_id
+        string cloudinary_public_id
+        string cloudinary_asset_id
+        string resource_type
+        string secure_url
+        string format
+        integer width
+        integer height
+        integer duration
+        integer bytes
+        string alt_text
+        string caption
+        string credit
+        datetime created_at
+        datetime updated_at
+    }
+
+    COMMENT {
+        string id
+        string post_id
+        string author_name
+        string author_email
+        string body
+        string status
+        datetime created_at
+        datetime updated_at
+    }
+```
+
+---
+
+# 28. UI COMPONENT INVENTORY
+
+Build a coherent design system rather than styling every page independently.
+
+Required reusable components include:
+
+## Global
+
+- site header
+- mobile navigation
+- site footer
+- logo
+- isometric brand mark
+- theme toggle if a dark theme is implemented
+- breadcrumb
+- toast
+- modal
+- drawer
+- command/search input
+- pagination
+- empty state
+- error state
+- loading skeleton
+- confirmation dialog
+
+## Editorial
+
+- story card
+- featured story
+- compact story row
+- author byline
+- reading metadata
+- category label
+- tag
+- article body
+- image figure
+- video figure
+- callout
+- related stories
+- article share controls
+
+## Studio
+
+- studio sidebar
+- studio header
+- status badge
+- post table
+- filter bar
+- editor shell
+- editor toolbar
+- media picker
+- upload dropzone
+- media grid
+- media detail panel
+- revision list
+- category manager
+- tag manager
+- settings form
+- publishing sidebar
+
+---
+
+# 29. DASHBOARD VISUAL DESIGN
+
+The studio should NOT look like a standard admin template.
+
+Instead:
+
+```text
+┌──────────────────────────────────────────────────────────────┐
+│  [GEOMETRIC MARK] CINDERPRESS               + New     Avatar │
+├───────────────┬──────────────────────────────────────────────┤
+│               │                                              │
+│ OVERVIEW      │  Good morning                               │
+│               │  Your publication at a glance                │
+│ Posts         │                                              │
+│ Drafts        │  ┌──────────┐ ┌──────────┐ ┌──────────┐     │
+│ Published     │  │ Drafts   │ │ Published│ │ Views    │     │
+│ Media         │  └──────────┘ └──────────┘ └──────────┘     │
+│ Categories    │                                              │
+│ Tags          │  Recent stories                              │
+│ Comments      │  ─────────────────────────────────────────   │
+│ Authors       │  Story title                         Draft   │
+│ Revisions     │  Story title                      Published  │
+│               │                                              │
+│ SETTINGS      │                                              │
+│ Publication   │                                              │
+│ Profile       │                                              │
+│ SEO           │                                              │
+│               │                                              │
+└───────────────┴──────────────────────────────────────────────┘
+```
+
+Use restrained cards.
+
+Do not create a wall of rounded cards.
+
+---
+
+# 30. BRAND / LOGO IMPLEMENTATION
+
+Create the logo as an original geometric mark.
+
+Possible construction:
+
+```text
+        /──────/
+       /      /|
+      /──────/ |
+      |      | /
+      |      |/
+      └──────┘
+```
+
+But do not literally use this primitive cube as the finished mark.
+
+The final mark should communicate an editorial page being folded, layered, indexed, or published.
+
+Use a custom vector path or a small set of geometric primitives.
+
+Create:
+
+- favicon
+- app icon
+- horizontal lockup
+- icon-only mark
+- monochrome variant
+
+The mark should still be recognizable at 16–24px.
+
+---
+
+# 31. THEME DETAILS
+
+## Light mode
+
+Primary canvas:
+
+warm white/paper
+
+Main text:
+
+near-black
+
+Secondary surfaces:
+
+very light warm gray
+
+Borders:
+
+neutral warm gray
+
+Accent:
+
+orange
+
+## Dark mode
+
+Optional but strongly recommended.
+
+Use:
+
+- charcoal/ink background
+- warm off-white text
+- dark graphite surfaces
+- subtle gray borders
+- orange accent
+
+Do not invert everything to a harsh black-white contrast.
+
+Do not use purple/blue gradients in either theme.
+
+---
+
+# 32. MICROINTERACTIONS
+
+Good examples:
+
+- logo subtly rotates one geometric layer on first load
+- upload zone highlights border on drag-over
+- publish button transitions from idle → publishing → published
+- autosave status transitions smoothly
+- cards have restrained hover elevation
+- search suggestions appear with a short opacity/translate transition
+- mobile drawer uses a clean slide
+- article images reveal softly as loaded
+
+Bad examples:
+
+- cards constantly floating
+- glowing buttons
+- animated gradients
+- rotating 3D logos continuously
+- excessive parallax
+- animated background particles
+
+---
+
+# 33. EMPTY STATES
+
+Every meaningful empty state should have a purpose-built message and optional geometric/isometric illustration.
+
+Examples:
+
+No posts:
+
+"Your publication is still a blank page."
+
+Action:
+
+"Create your first story"
+
+No media:
+
+"Your media library is ready for its first asset."
+
+Action:
+
+"Upload media"
+
+No comments:
+
+"No conversations yet."
+
+No search results:
+
+"No stories matched that search."
+
+Avoid generic sad-face illustrations.
+
+---
+
+# 34. ERROR STATES
+
+Errors must feel polished and useful.
+
+Examples:
+
+Upload failed:
+
+"That upload didn't make it to the library."
+
+With:
+
+"Try again"
+
+and technical details behind a disclosure where appropriate.
+
+Do not show raw stack traces.
+
+---
+
+# 35. SETTINGS
+
+Publication settings:
+
+- publication name
+- description
+- logo
+- favicon
+- default metadata
+- social links
+- locale
+- timezone
+- default category behavior
+- comment policy
+
+Profile:
+
+- display name
+- avatar
+- bio
+- website
+- social links
+
+SEO:
+
+- site title
+- default description
+- default social image
+- robots behavior
+- canonical base
+
+---
+
+# 36. COMMENTS
+
+Build a simple moderation workflow.
+
+Public:
+
+- submit comment
+- visible submission state
+- no raw moderation controls
+
+Studio:
+
+- pending
+- approved
+- rejected
+- spam
+
+Moderators/editors can update status if authorized.
+
+Do not build nested threaded discussions in v1 unless the repo already contains that requirement.
+
+---
+
+# 37. ANALYTICS ABSTRACTION
+
+Build a tiny internal event abstraction, for example conceptually:
+
+```ts
+trackEvent({
+  name: "post_view",
+  postId,
+  metadata
+})
+```
+
+Do not immediately add a complex analytics platform.
+
+Track only useful events:
+
+- post_view
+- search
+- media_upload
+- post_created
+- post_updated
+- post_published
+- comment_submitted
+- comment_moderated
+
+Keep the implementation replaceable.
+
+---
+
+# 38. TEST STRATEGY
+
+At minimum, test:
+
+## Unit
+
+- slug generation
+- content validation
+- permission checks
+- reading-time calculation
+- metadata generation
+- Cloudinary transformation helpers
+- publishing validation
+
+## Integration
+
+- authenticated request handling
+- post CRUD
+- media metadata creation
+- publishing
+- comment moderation
+- category/tag assignment
+
+## E2E
+
+Test the actual browser flows:
+
+1. public homepage loads
+2. article opens
+3. search works
+4. sign-in opens
+5. authenticated user can access Studio
+6. unauthorized user cannot access Studio
+7. create post
+8. save draft
+9. upload Cloudinary media
+10. insert image into article
+11. preview
+12. publish
+13. public article appears
+14. edit published article
+15. cache/revalidation works
+16. sign out
+17. signed-out access is blocked
+18. mobile layout remains usable
+
+Use the installed browser verification skill / agent-browser capability after major milestones.
+
+---
+
+# 39. VISUAL QA
+
+Do not assume the UI is correct because TypeScript compiles.
+
+Use browser verification and inspect:
+
+- mobile 360px
+- mobile 390px
+- tablet
+- desktop
+- large desktop
+
+Look specifically for:
+
+- horizontal overflow
+- clipped text
+- broken editor layouts
+- modal overflow
+- bad image crops
+- excessive shadows
+- inconsistent radii
+- purple/blue leakage
+- generic template appearance
+- weak typography
+- accidental gradients
+- poor focus states
+- layout shift
+- slow initial render
+
+If you see a generic AI-generated look, redesign it.
+
+---
+
+# 40. PRODUCTION DEPLOYMENT ARCHITECTURE
+
+Target:
+
+```mermaid
+flowchart LR
+    USER[Browser] --> CF[Cloudflare]
+    CF --> NEXT[Next.js App on Cloudflare Runtime]
+
+    NEXT --> AUTH[InsForge Auth]
+    NEXT --> D1[(Cloudflare D1)]
+    NEXT --> CLD[Cloudinary]
+
+    CLD --> CDN[Cloudinary CDN]
+
+    CF --> WAF[Cloudflare Security Layer]
+    NEXT --> OBS[Cloudflare Logs / Observability]
+```
+
+The exact current Cloudflare Next.js deployment mechanism must be verified through the connected Cloudflare documentation/MCP before final deployment.
+
+Do not use a deprecated Cloudflare Pages pattern merely because an old tutorial says to.
+
+---
+
+# 41. ENVIRONMENT VARIABLE POLICY
+
+Create a clean `.env.example`.
+
+Possible categories:
+
+```text
+# App
+NEXT_PUBLIC_APP_URL=
+NEXT_PUBLIC_PUBLICATION_NAME=
+
+# InsForge
+NEXT_PUBLIC_INSFORGE_URL=
+NEXT_PUBLIC_INSFORGE_ANON_KEY=
+# plus any server-side secret required by the current official InsForge integration
+
+# Cloudinary
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=
+NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=
+# server-only API key/secret as required by the current secure integration
+
+# Cloudflare
+# bindings/configuration should use the platform's official mechanism,
+# not arbitrary values invented by the agent
+```
+
+Do not finalize exact secret names until current SDK/docs are checked.
+
+Never expose a server-only secret through `NEXT_PUBLIC_*`.
+
+---
+
+# 42. DEVELOPMENT / PRODUCTION SEPARATION
+
+Development can have:
+
+- seed data
+- local fixtures
+- controlled preview content
+
+But:
+
+```text
+DEVELOPMENT MOCKS
+      !=
+PRODUCTION AUTH
+      !=
+PRODUCTION DATA
+```
+
+Any development bypass must require an explicit development-only condition.
+
+Example policy:
+
+```text
+if development AND explicit local mock flag:
+    allow fixture behavior
+else:
+    require real authentication
+```
+
+Do not make "NODE_ENV !== production" alone the only guard for sensitive bypasses.
+
+Never ship a fake admin session.
+
+---
+
+# 43. MIGRATIONS
+
+Use real database migrations.
+
+Do not modify the production database schema by silently running ad-hoc SQL from application startup.
+
+Migration files must be:
+
+- deterministic
+- ordered
+- reviewable
+- repeatable in clean environments
+
+Seed files should be separate from migration files.
+
+---
+
+# 44. CONTENT SEED
+
+Create realistic sample content for local development.
+
+Include:
+
+- 1 publication
+- 3–5 categories
+- 8–12 stories
+- 3 authors
+- tags
+- realistic excerpts
+- realistic cover image references where safe
+- drafts
+- published content
+- comments in moderation states
+
+Do not use lorem ipsum.
+
+The sample content should look like an actual technology/editorial publication.
+
+Possible editorial themes:
+
+- technology
+- web infrastructure
+- design
+- developer tools
+- digital culture
+- product engineering
+
+---
+
+# 45. WRITING STYLE
+
+Public editorial copy should be:
+
+- confident
+- concise
+- intelligent
+- human
+- not corporate filler
+- not AI-generated sounding
+- not stuffed with buzzwords
+
+Studio UI copy should be:
+
+- concise
+- informative
+- calm
+- actionable
+
+Avoid:
+
+"Supercharge your workflow with next-generation AI-powered content orchestration."
+
+Prefer:
+
+"Create, edit, and publish stories from one workspace."
+
+---
+
+# 46. HOME PAGE DEMO CONTENT STYLE
+
+The design should visually support strong editorial headlines such as:
+
+"Why the fastest software is often the least complicated."
+
+"Inside the new generation of edge-native applications."
+
+"The quiet return of industrial interface design."
+
+These are placeholders for demo content only.
+
+Do not write dozens of fake startup slogans.
+
+---
+
+# 47. DESIGN SYSTEM TOKENS
+
+Define central tokens for:
+
+- spacing
+- typography
+- radii
+- borders
+- shadows
+- colors
+- motion
+- container widths
+- editorial reading width
+
+Avoid hard-coded visual values repeated throughout components.
+
+Conceptually:
+
+```text
+spacing
+├── xs
+├── sm
+├── md
+├── lg
+├── xl
+└── 2xl
+
+radius
+├── sm
+├── md
+└── lg
+
+shadow
+├── subtle
+├── medium
+└── floating
+
+container
+├── page
+├── content
+└── reading
+```
+
+---
+
+# 48. NO DESIGN DEBT
+
+Before declaring UI complete:
+
+- inspect every page at mobile size
+- inspect every page at desktop size
+- compare spacing rhythm
+- verify typography
+- verify button hierarchy
+- verify forms
+- verify loading states
+- verify empty states
+- verify error states
+- verify dark mode if included
+- remove inconsistent one-off styles
+
+Do not ship five different button styles.
+
+Do not ship five different card radii.
+
+Do not ship arbitrary colors.
+
+---
+
+# 49. IMPLEMENTATION PHASES
+
+## PHASE 1 — REPOSITORY + SERVICE AUDIT
+
+First:
+
+- inspect repo
+- inspect package manager
+- inspect existing Next.js/React version
+- inspect current routes
+- inspect existing database
+- inspect Cloudflare configuration
+- inspect Cloudinary configuration
+- inspect InsForge connection
+- inspect available MCP servers
+- inspect design/UI skills
+
+Write a short internal implementation map.
+
+Do not delete functioning work without reason.
+
+## PHASE 2 — FOUNDATION
+
+Implement:
+
+- design tokens
+- typography
+- global CSS
+- theme
+- layout system
+- logo
+- navigation
+- base UI
+- app shell
+
+Validate responsive behavior early.
+
+## PHASE 3 — AUTH
+
+Implement real InsForge auth.
+
+Validate:
+
+- sign-up
+- sign-in
+- session
+- sign-out
+- protected Studio
+- unauthorized state
+
+Do not proceed with fake production auth.
+
+## PHASE 4 — DATABASE
+
+Implement:
+
+- D1 migrations
+- schema
+- indexes
+- relationships
+- seed data
+- safe query layer
+- authorization helpers
+
+## PHASE 5 — PUBLIC SITE
+
+Implement:
+
+- homepage
+- story listing
+- article page
+- categories
+- tags
+- author pages
+- search
+- archive
+
+## PHASE 6 — STUDIO
+
+Implement:
+
+- dashboard
+- posts list
+- post creation
+- editor
+- save draft
+- publish
+- revision history
+- categories/tags
+- media library
+- settings
+
+## PHASE 7 — CLOUDINARY MEDIA
+
+Implement:
+
+- secure upload authorization
+- media library
+- image delivery
+- responsive transformations
+- article insertion
+- cover image selection
+- alt text/caption/credit
+
+## PHASE 8 — SEO + DISCOVERABILITY
+
+Implement:
+
+- metadata
+- canonical
+- OG
+- JSON-LD
+- sitemap
+- robots
+- RSS
+
+## PHASE 9 — SECURITY + PERFORMANCE
+
+Audit:
+
+- auth
+- authorization
+- secret exposure
+- XSS
+- input validation
+- upload security
+- caching
+- bundle size
+- client component usage
+
+## PHASE 10 — BROWSER VERIFICATION
+
+Run full end-to-end browser checks.
+
+Fix everything found.
+
+## PHASE 11 — DEPLOYMENT
+
+Use current official Cloudflare deployment guidance.
+
+Verify:
+
+- build
+- deployment
+- environment variables
+- D1 binding
+- auth
+- Cloudinary
+- public pages
+- Studio
+- logs
+
+## PHASE 12 — FINAL QA
+
+Do not stop at "build succeeded."
+
+The definition of completion is functional + visual + secure + responsive + deployable.
+
+---
+
+# 50. AGENT DECISION RULES
+
+When several technical choices are possible:
+
+Choose the simplest option that:
+
+1. is production-safe
+2. works on Cloudflare
+3. works with the current Next.js runtime
+4. keeps Cloudinary focused on media
+5. keeps InsForge focused on authentication
+6. keeps D1 focused on relational application data
+7. minimizes dependencies
+8. performs well on mobile
+9. can be understood by another agent later
+
+Do not optimize for novelty.
+
+Optimize for reliability.
+
+---
+
+# 51. COMMON FAILURE MODES TO AVOID
+
+## Failure: localStorage-first architecture
+
+Do not do this.
+
+Wrong:
+
+```ts
+const userId = localStorage.getItem("userId") || crypto.randomUUID()
+```
+
+Correct:
+
+```text
+real authenticated session
+        ↓
+server verification
+        ↓
+authorized identity
+        ↓
+D1 query
+```
+
+## Failure: InsForge used as a fake wrapper
+
+Do not add InsForge just to display a login screen.
+
+Authentication must actually protect private data and routes.
+
+## Failure: Cloudinary as the database
+
+Do not store the entire CMS inside asset metadata.
+
+Use D1.
+
+## Failure: duplicate storage
+
+Do not store every Cloudinary image again in R2 or D1.
+
+Store references/metadata.
+
+## Failure: client-side authorization
+
+Do not trust hidden buttons.
+
+Server-side authorization is mandatory.
+
+## Failure: generic UI generator aesthetic
+
+Delete and redesign anything that becomes:
+
+- purple
+- neon
+- gradient-heavy
+- glass-heavy
+- dashboard-template-like
+- visually noisy
+
+## Failure: desktop-first publishing
+
+Do not sacrifice the reader experience on Android/mobile.
+
+## Failure: editor shipped without autosave/error handling
+
+Content creation needs durable saves and clear state.
+
+## Failure: no revision strategy
+
+Every publish/update operation should have a predictable revision model.
+
+---
+
+# 52. DEFINITION OF DONE
+
+The project is complete only when all of the following are true:
+
+### Architecture
+
+- Cloudflare is the application/edge platform.
+- D1 is the structured application database.
+- Cloudinary is the media platform.
+- InsForge is real authentication.
+- Responsibilities are clearly separated.
+
+### Authentication
+
+- real sign-up
+- real sign-in
+- real session persistence
+- real sign-out
+- protected Studio
+- server-side authorization
+- no identity localStorage
+- no fallback admin
+- no dev token in production
+
+### Publishing
+
+- create
+- edit
+- draft
+- preview
+- publish
+- revise
+- categorize
+- tag
+- author
+- cover image
+
+### Media
+
+- upload
+- store Cloudinary reference
+- optimized delivery
+- responsive images
+- alt text
+- captions
+- media library
+
+### Public web
+
+- homepage
+- stories
+- article
+- category
+- tag
+- author
+- search
+- archive
+- RSS
+- sitemap
+- robots
+
+### Visual
+
+- orange/warm-white industrial editorial theme
+- geometric/isometric original mark
+- strong typography
+- no neon gradients
+- no purple/blue SaaS aesthetic
+- no generic lock/shield visual language
+- no excessive glassmorphism
+- responsive design
+- restrained motion
+
+### Quality
+
+- type-safe
+- linted
+- tested
+- browser-verified
+- mobile-verified
+- accessibility reviewed
+- production build passes
+- deployment verified
+
+---
+
+# 53. FINAL AGENT REPORT
+
+At the end of implementation, provide a concise but complete report containing:
+
+1. What was built.
+2. Current architecture.
+3. Cloudflare resources created/used.
+4. Cloudinary resources/configuration used.
+5. InsForge authentication integration status.
+6. Database schema/migrations.
+7. Routes created.
+8. Important environment variables required.
+9. Tests executed.
+10. Browser checks executed.
+11. Any remaining limitations.
+12. Exact commands for local development.
+13. Exact deployment command(s) supported by the current Cloudflare configuration.
+14. Any manual dashboard steps that genuinely cannot be performed safely through MCP/CLI.
+
+Do not claim an integration is complete unless it has actually been verified.
+
+---
+
+# 54. FIRST ACTION
+
+Begin now.
+
+Start with:
+
+```text
+A. Inspect repository
+B. Inspect current stack
+C. Inspect installed design and infrastructure skills
+D. Inspect connected Cloudflare / Cloudinary / InsForge MCP capabilities
+E. Determine whether the repo is new or existing
+F. Produce the implementation map
+G. Start Phase 1
+```
+
+Then continue through the phases without unnecessary pauses.
+
+The guiding product principle is:
+
+> **Build a serious publishing instrument, not another generic AI SaaS dashboard.**
+
+The visual principle is:
+
+> **Warm white + black + disciplined Cloudflare-orange accents + geometric/isometric identity + editorial typography + precise borders + restrained depth.**
+
+The architecture principle is:
+
+> **InsForge = identity. Cloudflare = application/data/edge. Cloudinary = media.**
+
+The engineering principle is:
+
+> **Use Antigravity + MCP + official skills as the operating system for implementation, and never replace real security with convenience.**

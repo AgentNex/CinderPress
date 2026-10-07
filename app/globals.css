@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #FAF8F3;
+  --foreground: #171717;
+  --surface: #F3F0E8;
+  --surface-muted: #EAE5D9;
+  --border: #D9D4CA;
+  --accent: #F48120;
+  --accent-deep: #D86612;
+  --muted: #6B6B67;
+}
+
+.dark {
+  --background: #171717;
+  --foreground: #FAF8F3;
+  --surface: #242424;
+  --surface-muted: #383836;
+  --border: #454542;
+  --accent: #F48120;
+  --accent-deep: #D86612;
+  --muted: #A3A39E;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* Precise Industrial Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* High-Contrast Accessible Focus Rings */
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Prose Typography Measurements */
+.cinder-prose {
+  font-size: 1.125rem;
+  line-height: 1.75;
+  color: var(--foreground);
+}
+
+.cinder-prose p {
+  margin-bottom: 1.5rem;
+}
+
+.cinder-prose h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+.cinder-prose h3 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  color: var(--foreground);
+}
+
+.cinder-prose blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 1.25rem;
+  margin: 1.75rem 0;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.cinder-prose code {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.875em;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  padding: 0.15rem 0.35rem;
+  border-radius: 0.25rem;
+}
+
+.cinder-prose pre {
+  background-color: #171717;
+  color: #FAF8F3;
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  border: 1px solid #383836;
+  margin: 1.75rem 0;
+}
+
+.cinder-prose pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+}
